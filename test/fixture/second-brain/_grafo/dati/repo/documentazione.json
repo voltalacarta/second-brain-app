@@ -1,0 +1,72 @@
+{
+ "documenti": [
+  {
+   "aggiornato": "2026-10-01",
+   "collegati": [],
+   "concetti": {
+    "pagamenti": "pagamenti"
+   },
+   "creato": "2026-10-01",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "251efd19ae4a",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [],
+   "menzioni": {
+    "stripe": 3
+   },
+   "parole": 8,
+   "percorso": "10-decisioni/0001-usare-stripe.md",
+   "prossima_revisione": null,
+   "sintesi": "Si usa Stripe come gateway.",
+   "stato": "accettato",
+   "termini": {
+    "carte": 1,
+    "gateway": 1,
+    "stripe": 2
+   },
+   "tipo": null,
+   "titolo": "Usare Stripe per le carte",
+   "wikilink": []
+  },
+  {
+   "aggiornato": "2026-10-01",
+   "collegati": [],
+   "concetti": {
+    "indice": "indice"
+   },
+   "creato": "2026-10-01",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "e41e27e7c386",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [
+    "10-decisioni/0001-usare-stripe.md"
+   ],
+   "menzioni": {},
+   "parole": 3,
+   "percorso": "README.md",
+   "prossima_revisione": null,
+   "sintesi": "Decisioni: 0001.",
+   "stato": "attivo",
+   "termini": {
+    "decisioni": 1,
+    "documentazione": 1,
+    "prova": 1
+   },
+   "tipo": null,
+   "titolo": "Documentazione di prova",
+   "wikilink": []
+  }
+ ],
+ "esclusi": [],
+ "firma": "e362999d4c70",
+ "glossari": [],
+ "scartati": 0,
+ "sha": null,
+ "versione": 6
+}

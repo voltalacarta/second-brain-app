@@ -1,0 +1,3 @@
+stripe: { nome: Stripe, alias: [Stripe], categoria: strumento }
+mepa: { nome: MePA, alias: [MePA], categoria: organizzazione }
+cookie: { nome: Cookie, alias: [cookie, banner], categoria: normativa }

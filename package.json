@@ -1,0 +1,11 @@
+{
+  "name": "second-brain-app",
+  "private": true,
+  "type": "module",
+  "description": "App web per leggere e modificare il second brain di voltalacarta",
+  "scripts": {
+    "test": "node --test test/unit.test.js",
+    "e2e": "node test/e2e.mjs",
+    "build": "node scripts/build.mjs"
+  }
+}

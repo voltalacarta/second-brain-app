@@ -1,0 +1,239 @@
+{
+ "documenti": [
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {
+    "inbox": "inbox"
+   },
+   "creato": "2026-10-20",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "dd8ef52e6fa3",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [],
+   "menzioni": {
+    "mepa": 1,
+    "stripe": 1
+   },
+   "parole": 12,
+   "percorso": "00-inbox/benvenuto.md",
+   "prossima_revisione": null,
+   "sintesi": "Prima nota. Parla di Stripe e di MePA.",
+   "stato": null,
+   "termini": {
+    "benvenuto": 1,
+    "creare": 1,
+    "guida": 1,
+    "l'inizio": 1,
+    "leggere": 1,
+    "mepa": 1,
+    "parla": 1,
+    "repo": 1,
+    "stripe": 1
+   },
+   "tipo": "nota",
+   "titolo": "Benvenuto",
+   "wikilink": [
+    "inizia-qui"
+   ]
+  },
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {},
+   "creato": null,
+   "frontmatter": false,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "7167a7eebc84",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [],
+   "menzioni": {},
+   "parole": 5,
+   "percorso": "00-inbox/prova-xss.md",
+   "prossima_revisione": null,
+   "sintesi": "",
+   "stato": null,
+   "termini": {
+    "alert": 1,
+    "clicca": 1,
+    "prova": 1,
+    "sicurezza": 1
+   },
+   "tipo": null,
+   "titolo": "Prova sicurezza",
+   "wikilink": [
+    "<img src=x onerror=alert(4)>"
+   ]
+  },
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {
+    "demo": "demo",
+    "progetto": "progetto"
+   },
+   "creato": "2026-10-19",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "15c843cb84ad",
+   "link_esterni": 1,
+   "link_github": [],
+   "link_interni": [
+    "20-aree/strumenti.md"
+   ],
+   "menzioni": {
+    "cookie": 2
+   },
+   "parole": 29,
+   "percorso": "10-progetti/demo/README.md",
+   "prossima_revisione": null,
+   "sintesi": "[!NOTE] Un progetto finto per i test dell'app.",
+   "stato": "attivo",
+   "termini": {
+    "area": 1,
+    "attività": 1,
+    "banner": 1,
+    "collegamenti": 1,
+    "cookie": 1,
+    "dell'app": 1,
+    "demo": 1,
+    "esterno": 1,
+    "finto": 1,
+    "progetto": 2,
+    "pulsante": 1,
+    "recesso": 1,
+    "rifiuta": 1
+   },
+   "tipo": "progetto",
+   "titolo": "Progetto demo",
+   "wikilink": []
+  },
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {
+    "strumenti": "strumenti"
+   },
+   "creato": "2026-10-18",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "1e6408339262",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [
+    "10-progetti/demo/README.md"
+   ],
+   "menzioni": {
+    "stripe": 2
+   },
+   "parole": 11,
+   "percorso": "20-aree/strumenti.md",
+   "prossima_revisione": null,
+   "sintesi": "Usiamo Stripe per le carte. Vedi anche il progetto demo e benvenuto.",
+   "stato": null,
+   "termini": {
+    "benvenuto": 1,
+    "carte": 1,
+    "demo": 1,
+    "progetto": 1,
+    "stripe": 2,
+    "strumenti": 1,
+    "usiamo": 1
+   },
+   "tipo": "area",
+   "titolo": "Strumenti",
+   "wikilink": [
+    "benvenuto"
+   ]
+  },
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {},
+   "creato": null,
+   "frontmatter": false,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "956b869bd614",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [],
+   "menzioni": {},
+   "parole": 8,
+   "percorso": "40-archivio/README.md",
+   "prossima_revisione": null,
+   "sintesi": "Qui finisce ciò che non serve più.",
+   "stato": null,
+   "termini": {
+    "archivio": 1,
+    "finisce": 1
+   },
+   "tipo": null,
+   "titolo": "Archivio",
+   "wikilink": []
+  },
+  {
+   "aggiornato": null,
+   "collegati": [],
+   "concetti": {
+    "indice": "indice"
+   },
+   "creato": "2026-10-20",
+   "frontmatter": true,
+   "frontmatter_valido": true,
+   "glossario": false,
+   "impronta": "7ec4ae93b29e",
+   "link_esterni": 0,
+   "link_github": [],
+   "link_interni": [
+    "10-progetti/demo/README.md",
+    "20-aree/strumenti.md"
+   ],
+   "menzioni": {},
+   "parole": 22,
+   "percorso": "inizia-qui.md",
+   "prossima_revisione": null,
+   "sintesi": "Benvenuto nel second brain di prova. Vai al progetto demo oppure leggi benvenuto.",
+   "stato": null,
+   "termini": {
+    "area": 1,
+    "benvenuto": 2,
+    "brain": 1,
+    "demo": 1,
+    "idea-futura": 1,
+    "inizia": 1,
+    "leggi": 1,
+    "oppure": 1,
+    "progetto": 1,
+    "prova": 1,
+    "second": 1,
+    "strumenti": 1
+   },
+   "tipo": "indice",
+   "titolo": "Inizia qui",
+   "wikilink": [
+    "benvenuto",
+    "idea-futura"
+   ]
+  }
+ ],
+ "esclusi": [
+  "_modelli/giornaliera.md",
+  "_modelli/lettura.md",
+  "_modelli/nota.md",
+  "_modelli/progetto.md",
+  "_modelli/riunione.md"
+ ],
+ "firma": "e362999d4c70",
+ "glossari": [],
+ "scartati": 0,
+ "sha": null,
+ "versione": 6
+}

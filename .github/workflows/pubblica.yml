@@ -1,0 +1,64 @@
+# Prova l'app (test unitari + Chromium vero contro un'API di GitHub simulata) e, se va tutto bene, la pubblica su GitHub Pages.
+name: Test e pubblicazione
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pubblica-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test unitari (renderer, link, frontmatter, sicurezza)
+        run: npm test
+      - name: Compila
+        run: npm run build
+      - name: Installa Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium
+      - name: Prove nel browser (accesso, lettura, modifica, conflitti, grafo, telefono)
+        run: SB_SCREENSHOT=test/screenshot npm run e2e
+      - name: Schermate delle prove
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: schermate
+          path: test/screenshot
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Prepara il sito
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  pubblica:
+    name: Pubblica su Pages
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

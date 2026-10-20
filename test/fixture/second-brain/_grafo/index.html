@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grafo della conoscenza</title>
+<style>
+:root{
+  --bg:#ffffff;--fg:#1f2328;--muted:#59636e;--line:#d1d9e0;--panel:#f6f8fa;--accent:#0969da;
+  --repo:#1f6feb;--nota:#1a7f37;--concetto:#9a6700;--segnaposto:#8c959f;--edge:rgba(31,35,40,.16);--edgeHi:rgba(9,105,218,.75);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0d1117;--fg:#e6edf3;--muted:#9198a1;--line:#30363d;--panel:#161b22;--accent:#4493f8;
+  --repo:#4493f8;--nota:#3fb950;--concetto:#d29922;--segnaposto:#6e7681;--edge:rgba(230,237,243,.13);--edgeHi:rgba(68,147,248,.85);
+}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{display:grid;grid-template-columns:1fr 340px;height:100%}
+#tela{position:relative;overflow:hidden;touch-action:none}
+canvas{display:block;width:100%;height:100%;cursor:grab}
+canvas.trascina{cursor:grabbing}
+#barra{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;pointer-events:none}
+#barra>*{pointer-events:auto}
+input[type=search],select{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+input[type=search]{width:min(320px,100%)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:13px;user-select:none;cursor:pointer}
+.chip input{margin:0}
+.pallino{width:10px;height:10px;border-radius:50%;display:inline-block}
+button{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+#info{position:absolute;bottom:10px;left:12px;color:var(--muted);font-size:12px;pointer-events:none}
+#suggerimento{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;max-width:280px;display:none;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+aside{border-left:1px solid var(--line);background:var(--panel);overflow:auto;padding:16px}
+aside h1{font-size:17px;margin:0 0 6px}
+aside .tipo{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+aside p{margin:8px 0}
+aside a{color:var(--accent);text-decoration:none}
+aside a:hover{text-decoration:underline}
+aside ul{list-style:none;margin:6px 0 14px;padding:0}
+aside li{padding:3px 0;border-bottom:1px dashed var(--line)}
+aside li a{cursor:pointer}
+aside .vuoto{color:var(--muted)}
+aside h2{font-size:13px;margin:16px 0 4px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.legenda{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;align-items:center;font-size:13px;margin-top:10px}
+@media (max-width:760px){#app{grid-template-columns:1fr;grid-template-rows:62% 38%}aside{border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="tela">
+    <canvas id="c" aria-label="Grafo delle repo, dei documenti e dei concetti"></canvas>
+    <div id="barra">
+      <input id="cerca" type="search" placeholder="Cerca nota, documento, concetto…" autocomplete="off">
+      <select id="repo" aria-label="Filtra per repo"><option value="">Tutte le repo</option></select>
+      <label class="chip"><input type="checkbox" data-tipo="repo" checked><span class="pallino" style="background:var(--repo)"></span>Repo</label>
+      <label class="chip"><input type="checkbox" data-tipo="nota" checked><span class="pallino" style="background:var(--nota)"></span>Note</label>
+      <label class="chip"><input type="checkbox" data-tipo="documento" checked><span class="pallino" style="background:#8c959f"></span>Documenti</label>
+      <label class="chip"><input type="checkbox" data-tipo="concetto" checked><span class="pallino" style="background:var(--concetto)"></span>Concetti</label>
+      <label class="chip" title="Concetti trovati nel testo dei file"><input type="checkbox" id="menzioni" checked><span>Menzioni</span></label>
+      <button id="centra" title="Adatta alla finestra">⤢</button>
+    </div>
+    <div id="suggerimento"></div>
+    <div id="info"></div>
+  </div>
+  <aside id="pannello"></aside>
+</div>
+<script id="dati" type="application/json">{"versione":1,"nodi":[{"id":"c:cookie","l":"Cookie","t":"concetto","r":null,"c":"normativa","s":"","u":"","p":"_grafo/concetti/cookie.md","g":1,"st":null},{"id":"c:demo","l":"Demo","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"_grafo/concetti/demo.md","g":1,"st":null},{"id":"c:idea-futura","l":"idea-futura","t":"concetto","r":null,"c":"segnaposto","s":"","u":"","p":"_grafo/concetti/idea-futura.md","g":1,"st":null},{"id":"c:img-src-x-onerror-alert-4","l":"<img src=x onerror=alert(4)>","t":"concetto","r":null,"c":"segnaposto","s":"","u":"","p":"_grafo/concetti/img-src-x-onerror-alert-4.md","g":1,"st":null},{"id":"c:inbox","l":"Inbox","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"_grafo/concetti/inbox.md","g":1,"st":null},{"id":"c:indice","l":"Indice","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"_grafo/concetti/indice.md","g":2,"st":null},{"id":"c:mepa","l":"MePA","t":"concetto","r":null,"c":"organizzazione","s":"","u":"","p":"_grafo/concetti/mepa.md","g":1,"st":null},{"id":"c:pagamenti","l":"Pagamenti","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"_grafo/concetti/pagamenti.md","g":1,"st":null},{"id":"c:progetto","l":"Progetto","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"_grafo/concetti/progetto.md","g":1,"st":null},{"id":"c:stripe","l":"Stripe","t":"concetto","r":null,"c":"strumento","s":"","u":"","p":"_grafo/concetti/stripe.md","g":3,"st":null},{"id":"c:strumenti","l":"Strumenti","t":"concetto","r":null,"c":"tag","s":"","u":"","p":"20-aree/strumenti.md","g":1,"st":null},{"id":"doc:documentazione/10-decisioni/0001-usare-stripe.md","l":"Usare Stripe per le carte","t":"documento","r":"documentazione","c":null,"s":"Si usa Stripe come gateway.","u":"https://github.com/voltalacarta/documentazione/blob/main/10-decisioni/0001-usare-stripe.md","p":"_grafo/documenti/documentazione/usare-stripe-per-le-carte.md","g":4,"st":"accettato"},{"id":"doc:documentazione/README.md","l":"Documentazione di prova","t":"documento","r":"documentazione","c":null,"s":"Decisioni: 0001.","u":"https://github.com/voltalacarta/documentazione/blob/main/README.md","p":"_grafo/documenti/documentazione/documentazione-di-prova.md","g":3,"st":"attivo"},{"id":"doc:second-brain/00-inbox/benvenuto.md","l":"Benvenuto","t":"nota","r":"second-brain","c":null,"s":"Prima nota. Parla di Stripe e di MePA.","u":"https://github.com/voltalacarta/second-brain/blob/main/00-inbox/benvenuto.md","p":"00-inbox/benvenuto.md","g":7,"st":null},{"id":"doc:second-brain/00-inbox/prova-xss.md","l":"Prova sicurezza","t":"nota","r":"second-brain","c":null,"s":"","u":"https://github.com/voltalacarta/second-brain/blob/main/00-inbox/prova-xss.md","p":"00-inbox/prova-xss.md","g":2,"st":null},{"id":"doc:second-brain/10-progetti/demo/README.md","l":"Progetto demo","t":"nota","r":"second-brain","c":null,"s":"[!NOTE] Un progetto finto per i test dell'app.","u":"https://github.com/voltalacarta/second-brain/blob/main/10-progetti/demo/README.md","p":"10-progetti/demo/README.md","g":7,"st":"attivo"},{"id":"doc:second-brain/20-aree/strumenti.md","l":"Strumenti","t":"nota","r":"second-brain","c":null,"s":"Usiamo Stripe per le carte. Vedi anche il progetto demo e benvenuto.","u":"https://github.com/voltalacarta/second-brain/blob/main/20-aree/strumenti.md","p":"20-aree/strumenti.md","g":7,"st":null},{"id":"doc:second-brain/40-archivio/README.md","l":"Archivio","t":"nota","r":"second-brain","c":null,"s":"Qui finisce ciò che non serve più.","u":"https://github.com/voltalacarta/second-brain/blob/main/40-archivio/README.md","p":"40-archivio/README.md","g":1,"st":null},{"id":"doc:second-brain/inizia-qui.md","l":"Inizia qui","t":"nota","r":"second-brain","c":null,"s":"Benvenuto nel second brain di prova. Vai al progetto demo oppure leggi benvenuto.","u":"https://github.com/voltalacarta/second-brain/blob/main/inizia-qui.md","p":"inizia-qui.md","g":7,"st":null},{"id":"repo:documentazione","l":"documentazione","t":"repo","r":"documentazione","c":null,"s":"","u":"https://github.com/voltalacarta/documentazione","p":"_grafo/repo/repo-documentazione.md","g":2,"st":null},{"id":"repo:second-brain","l":"second-brain","t":"repo","r":"second-brain","c":null,"s":"","u":"https://github.com/voltalacarta/second-brain","p":"_grafo/repo/repo-second-brain.md","g":6,"st":null}],"archi":[[11,7,"tag",3.0],[11,9,"menziona",1.25],[12,5,"tag",3.0],[12,11,"link",2.0],[13,4,"tag",3.0],[13,6,"menziona",0.75],[13,9,"menziona",0.75],[13,18,"wikilink",2.0],[14,3,"wikilink",2.0],[15,0,"menziona",1.0],[15,1,"tag",3.0],[15,8,"tag",3.0],[15,16,"link",2.0],[16,9,"menziona",1.0],[16,10,"tag",3.0],[16,13,"wikilink",2.0],[16,15,"link",2.0],[18,2,"wikilink",2.0],[18,5,"tag",3.0],[18,13,"wikilink",2.0],[18,15,"link",2.0],[18,16,"link",2.0],[19,11,"contiene",0.5],[19,12,"contiene",0.5],[20,13,"contiene",0.5],[20,14,"contiene",0.5],[20,15,"contiene",0.5],[20,16,"contiene",0.5],[20,17,"contiene",0.5],[20,18,"contiene",0.5]],"hub":{"url":"https://github.com/voltalacarta/second-brain","ramo":"main"}}</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById("dati").textContent);
+const HUB = D.hub || {};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tavolozza = ["#8250df","#bf3989","#0a7f8c","#cf222e","#6e7781","#1b7c83","#953800","#5a32a3","#116329","#a40e26"];
+const coloreRepo = {};
+[...new Set(D.nodi.map(n => n.r).filter(Boolean))].sort().forEach((r, i) => coloreRepo[r] = tavolozza[i % tavolozza.length]);
+
+// ---- dati
+const N = D.nodi.map((n, i) => Object.assign(n, { i, x: 0, y: 0, vx: 0, vy: 0, fisso: false, vis: true, vicini: [] }));
+const E = D.archi.map(([a, b, t, w]) => ({ a: N[a], b: N[b], t, w }));
+E.forEach(e => { e.a.vicini.push(e); e.b.vicini.push(e); });
+const raggio = n => n.t === "repo" ? 11 : n.t === "concetto" ? 4 + Math.min(10, Math.sqrt(n.g)) : 3 + Math.min(5, Math.sqrt(n.g) / 2);
+const colore = n => n.t === "repo" ? css("--repo") : n.t === "nota" ? css("--nota") : n.t === "concetto" ? (n.c === "segnaposto" ? css("--segnaposto") : css("--concetto")) : (coloreRepo[n.r] || "#8c959f");
+
+// posizioni iniziali: ogni repo su un cerchio, i suoi file intorno
+const repoNodi = N.filter(n => n.t === "repo");
+repoNodi.forEach((r, k) => { const a = 2 * Math.PI * k / Math.max(1, repoNodi.length); r.x = Math.cos(a) * 400; r.y = Math.sin(a) * 400; });
+const posRepo = Object.fromEntries(repoNodi.map(r => [r.r, r]));
+N.forEach(n => { if (n.t === "repo") return; const r = posRepo[n.r]; const a = Math.random() * 6.283, d = 60 + Math.random() * 220;
+  n.x = (r ? r.x * .6 : 0) + Math.cos(a) * d; n.y = (r ? r.y * .6 : 0) + Math.sin(a) * d; });
+
+// ---- filtri
+const sel = document.getElementById("repo");
+Object.keys(coloreRepo).forEach(r => { const o = document.createElement("option"); o.value = r; o.textContent = r; sel.appendChild(o); });
+const tipiAttivi = new Set(["repo", "nota", "documento", "concetto"]);
+let conMenzioni = true, filtroRepo = "", query = "";
+function aggiornaVisibili() {
+  const q = query.toLowerCase();
+  N.forEach(n => {
+    n.vis = tipiAttivi.has(n.t) && (!filtroRepo || n.r === filtroRepo || n.t === "concetto");
+    n.trovato = q && (n.l.toLowerCase().includes(q) || (n.s || "").toLowerCase().includes(q) || n.id.toLowerCase().includes(q));
+  });
+  if (filtroRepo) { // i concetti restano solo se collegati alla repo scelta
+    N.forEach(n => { if (n.t === "concetto") n.vis = tipiAttivi.has("concetto") && n.vicini.some(e => { const o = e.a === n ? e.b : e.a; return o.r === filtroRepo && arcoVisibile(e); }); });
+  }
+  E.forEach(e => e.vis = e.a.vis && e.b.vis && arcoVisibile(e));
+  N.forEach(n => { if (n.t === "concetto" && n.vis && !n.vicini.some(e => e.vis)) n.vis = false; });
+  calore = Math.max(calore, .5);
+  disegna();
+}
+const arcoVisibile = e => conMenzioni || e.t !== "menziona";
+document.querySelectorAll("[data-tipo]").forEach(c => c.addEventListener("change", () => { c.checked ? tipiAttivi.add(c.dataset.tipo) : tipiAttivi.delete(c.dataset.tipo); aggiornaVisibili(); }));
+document.getElementById("menzioni").addEventListener("change", e => { conMenzioni = e.target.checked; aggiornaVisibili(); });
+sel.addEventListener("change", () => { filtroRepo = sel.value; aggiornaVisibili(); adatta(); });
+const cerca = document.getElementById("cerca");
+cerca.addEventListener("input", () => { query = cerca.value.trim(); aggiornaVisibili(); });
+cerca.addEventListener("keydown", e => { if (e.key === "Enter") { const t = N.find(n => n.vis && n.trovato); if (t) { seleziona(t); vaiA(t); } } });
+
+// ---- simulazione (repulsione su griglia: costo lineare anche con migliaia di nodi)
+let calore = 1;
+function passo() {
+  const vis = N.filter(n => n.vis), cella = 90, griglia = new Map();
+  for (const n of vis) { const k = Math.floor(n.x / cella) + "," + Math.floor(n.y / cella); (griglia.get(k) || griglia.set(k, []).get(k)).push(n); }
+  for (const n of vis) {
+    const cx = Math.floor(n.x / cella), cy = Math.floor(n.y / cella);
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      const g = griglia.get((cx + dx) + "," + (cy + dy)); if (!g) continue;
+      for (const m of g) { if (m.i <= n.i) continue;
+        let x = n.x - m.x, y = n.y - m.y, d2 = x * x + y * y; if (d2 < .01) { x = Math.random() - .5; y = Math.random() - .5; d2 = .5; }
+        if (d2 > cella * cella) continue; const f = 900 / d2; n.vx += x * f * .01; n.vy += y * f * .01; m.vx -= x * f * .01; m.vy -= y * f * .01; }
+    }
+  }
+  for (const e of E) { if (!e.vis) continue;
+    const x = e.b.x - e.a.x, y = e.b.y - e.a.y, d = Math.sqrt(x * x + y * y) || 1;
+    const lungo = e.t === "contiene" ? 70 : e.t === "menziona" ? 110 : 60, k = (e.t === "contiene" ? .006 : .012) * Math.min(2, e.w);
+    const f = (d - lungo) * k, fx = x / d * f, fy = y / d * f; e.a.vx += fx; e.a.vy += fy; e.b.vx -= fx; e.b.vy -= fy; }
+  for (const n of vis) {
+    n.vx -= n.x * .0008; n.vy -= n.y * .0008;
+    if (!n.fisso) { n.x += n.vx * calore; n.y += n.vy * calore; }
+    n.vx *= .6; n.vy *= .6;
+  }
+  calore *= .985;
+}
+
+// ---- disegno
+const tela = document.getElementById("c"), ctx = tela.getContext("2d");
+let vista = { x: 0, y: 0, k: .9 }, scelto = null, sopra = null;
+function dimensiona() { const r = tela.getBoundingClientRect(), p = window.devicePixelRatio || 1; tela.width = r.width * p; tela.height = r.height * p; disegna(); }
+const aSchermo = n => [(n.x * vista.k + vista.x) , (n.y * vista.k + vista.y)];
+function disegna() {
+  const p = window.devicePixelRatio || 1, w = tela.width / p, h = tela.height / p;
+  ctx.setTransform(p, 0, 0, p, 0, 0); ctx.clearRect(0, 0, w, h);
+  ctx.save(); ctx.translate(vista.x + w / 2, vista.y + h / 2); ctx.scale(vista.k, vista.k);
+  const evid = scelto ? new Set([scelto, ...scelto.vicini.filter(e => e.a.vis && e.b.vis).map(e => e.a === scelto ? e.b : e.a)]) : null;
+  ctx.lineWidth = 1 / vista.k;
+  ctx.strokeStyle = css("--edge"); ctx.beginPath();
+  for (const e of E) { if (!e.vis || (evid && (e.a === scelto || e.b === scelto))) continue; ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); }
+  ctx.stroke();
+  if (scelto) { ctx.strokeStyle = css("--edgeHi"); ctx.lineWidth = 1.6 / vista.k; ctx.beginPath();
+    for (const e of scelto.vicini) { if (!e.a.vis || !e.b.vis) continue; ctx.moveTo(e.a.x, e.a.y); ctx.lineTo(e.b.x, e.b.y); } ctx.stroke(); }
+  const conQuery = !!query;
+  for (const n of N) { if (!n.vis) continue;
+    const spento = (evid && !evid.has(n)) || (conQuery && !n.trovato);
+    ctx.globalAlpha = spento ? .18 : 1; ctx.fillStyle = colore(n); ctx.beginPath(); ctx.arc(n.x, n.y, raggio(n), 0, 6.283); ctx.fill();
+    if (n === scelto || n.trovato) { ctx.lineWidth = 2.5 / vista.k; ctx.strokeStyle = css("--accent"); ctx.stroke(); } }
+  ctx.globalAlpha = 1; ctx.fillStyle = css("--fg"); ctx.textAlign = "center";
+  const sogliaC = vista.k > 1.6 ? 0 : vista.k > 1 ? 6 : 14, zoomDoc = vista.k > 1.9;
+  for (const n of N) { if (!n.vis) continue;
+    const importante = n.t === "repo" || n === scelto || n === sopra || n.trovato || (evid && evid.has(n)) ||
+      (n.t === "concetto" ? n.g >= sogliaC : zoomDoc);
+    if (!importante) continue; if (evid && !evid.has(n) && n.t !== "repo") continue;
+    ctx.font = `${n.t === "repo" ? 600 : 400} ${(n.t === "repo" ? 13 : 11) / Math.max(.75, vista.k)}px system-ui,sans-serif`;
+    ctx.fillText(n.l.length > 34 ? n.l.slice(0, 33) + "…" : n.l, n.x, n.y - raggio(n) - 4 / vista.k); }
+  ctx.restore();
+  const v = N.filter(n => n.vis).length;
+  document.getElementById("info").textContent = `${v} nodi visibili su ${N.length} · ${E.filter(e => e.vis).length} collegamenti · rotella o pizzico per lo zoom`;
+}
+function ciclo() { if (calore > .02) { for (let i = 0; i < 2; i++) passo(); disegna(); } requestAnimationFrame(ciclo); }
+
+// ---- interazione
+function nodoA(px, py) {
+  const r = tela.getBoundingClientRect(), x = (px - r.left - r.width / 2 - vista.x) / vista.k, y = (py - r.top - r.height / 2 - vista.y) / vista.k;
+  let migliore = null, md = Infinity;
+  for (const n of N) { if (!n.vis) continue; const d = (n.x - x) ** 2 + (n.y - y) ** 2, rr = (raggio(n) + 4 / vista.k) ** 2; if (d < rr && d < md) { md = d; migliore = n; } }
+  return migliore;
+}
+let trascino = null, inizio = null, mosso = false; const tocchi = new Map(); let pizzico = null;
+tela.addEventListener("pointerdown", e => { tela.setPointerCapture(e.pointerId); tocchi.set(e.pointerId, [e.clientX, e.clientY]);
+  if (tocchi.size === 2) { const [a, b] = [...tocchi.values()]; pizzico = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), k: vista.k }; return; }
+  mosso = false; inizio = [e.clientX, e.clientY, vista.x, vista.y]; trascino = nodoA(e.clientX, e.clientY); if (trascino) trascino.fisso = true; tela.classList.add("trascina"); });
+tela.addEventListener("pointermove", e => {
+  if (tocchi.has(e.pointerId)) tocchi.set(e.pointerId, [e.clientX, e.clientY]);
+  if (pizzico && tocchi.size === 2) { const [a, b] = [...tocchi.values()]; vista.k = Math.min(6, Math.max(.08, pizzico.k * Math.hypot(a[0] - b[0], a[1] - b[1]) / pizzico.d)); disegna(); return; }
+  if (inizio) { const dx = e.clientX - inizio[0], dy = e.clientY - inizio[1]; if (Math.abs(dx) + Math.abs(dy) > 3) mosso = true;
+    if (trascino) { trascino.x += e.movementX / vista.k; trascino.y += e.movementY / vista.k; calore = Math.max(calore, .3); }
+    else { vista.x = inizio[2] + dx; vista.y = inizio[3] + dy; } disegna(); return; }
+  const n = nodoA(e.clientX, e.clientY); if (n !== sopra) { sopra = n; disegna(); }
+  const t = document.getElementById("suggerimento");
+  if (n) { t.style.display = "block"; const r = tela.getBoundingClientRect(); t.style.left = (e.clientX - r.left + 14) + "px"; t.style.top = (e.clientY - r.top + 10) + "px";
+    t.innerHTML = `<strong>${esc(n.l)}</strong><br><span style="color:var(--muted)">${etichettaTipo(n)}${n.r && n.t !== "repo" ? " · " + esc(n.r) : ""}</span>`; }
+  else t.style.display = "none";
+});
+const fine = e => { tocchi.delete(e.pointerId); if (tocchi.size < 2) pizzico = null;
+  if (inizio && !mosso) { const n = nodoA(e.clientX, e.clientY); seleziona(n); }
+  if (trascino) trascino.fisso = false; trascino = null; inizio = null; tela.classList.remove("trascina"); };
+tela.addEventListener("pointerup", fine); tela.addEventListener("pointercancel", fine);
+tela.addEventListener("wheel", e => { e.preventDefault(); const r = tela.getBoundingClientRect(), mx = e.clientX - r.left - r.width / 2, my = e.clientY - r.top - r.height / 2;
+  const f = Math.exp(-e.deltaY * .0015), k = Math.min(6, Math.max(.08, vista.k * f)); vista.x = mx - (mx - vista.x) * k / vista.k; vista.y = my - (my - vista.y) * k / vista.k; vista.k = k; disegna(); }, { passive: false });
+document.getElementById("centra").addEventListener("click", adatta);
+window.addEventListener("resize", dimensiona);
+function adatta() { const vis = N.filter(n => n.vis); if (!vis.length) return; const r = tela.getBoundingClientRect();
+  const xs = vis.map(n => n.x), ys = vis.map(n => n.y), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  vista.k = Math.min(3, .9 * Math.min(r.width / Math.max(1, x1 - x0), r.height / Math.max(1, y1 - y0))); vista.x = -(x0 + x1) / 2 * vista.k; vista.y = -(y0 + y1) / 2 * vista.k; disegna(); }
+function vaiA(n) { vista.k = Math.max(vista.k, 1.4); vista.x = -n.x * vista.k; vista.y = -n.y * vista.k; disegna(); }
+
+// ---- pannello
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const etichettaTipo = n => ({ repo: "Repo", nota: "Nota", documento: "Documento", concetto: n.c === "segnaposto" ? "Nota da creare" : "Concetto" })[n.t] || n.t;
+const urlPagina = n => n.u || (HUB.url && n.p ? `${HUB.url}/blob/${HUB.ramo || "main"}/${n.p}` : "");
+const pannello = document.getElementById("pannello");
+function seleziona(n) {
+  scelto = n; disegna();
+  if (!n) { pannelloVuoto(); return; }
+  const gruppi = {};
+  for (const e of n.vicini) { const o = e.a === n ? e.b : e.a; const k = o.t === "concetto" ? "Concetti" : o.t === "repo" ? "Repo" : "File collegati"; (gruppi[k] ||= new Map()).set(o.i, o); }
+  const url = urlPagina(n), pag = n.p && HUB.url ? `${HUB.url}/blob/${HUB.ramo || "main"}/${n.p}` : "";
+  let h = `<div class="tipo">${etichettaTipo(n)}${n.r && n.t !== "repo" ? " · " + esc(n.r) : ""}${n.st ? " · " + esc(n.st) : ""}</div><h1>${esc(n.l)}</h1>`;
+  if (n.s) h += `<p>${esc(n.s)}</p>`;
+  h += `<p>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Apri su GitHub ↗</a>` : ""}${pag && pag !== url ? ` · <a href="${esc(pag)}" target="_blank" rel="noopener">Pagina nel second brain ↗</a>` : ""}</p>`;
+  for (const [k, m] of Object.entries(gruppi)) {
+    const elenco = [...m.values()].sort((a, b) => b.g - a.g).slice(0, 60);
+    h += `<h2>${k} (${m.size})</h2><ul>` + elenco.map(o => `<li><a data-i="${o.i}">${esc(o.l)}</a>${o.r && o.t !== "repo" && o.r !== n.r ? ` <span class="vuoto">· ${esc(o.r)}</span>` : ""}</li>`).join("") + "</ul>";
+  }
+  pannello.innerHTML = h;
+  pannello.querySelectorAll("a[data-i]").forEach(a => a.addEventListener("click", () => { const o = N[+a.dataset.i]; if (!o.vis) { o.vis = true; } seleziona(o); vaiA(o); }));
+}
+function pannelloVuoto() {
+  const conta = t => N.filter(n => n.t === t).length;
+  pannello.innerHTML = `<h1>Grafo della conoscenza</h1><p>${conta("repo")} repo · ${conta("nota")} note · ${conta("documento")} documenti · ${conta("concetto")} concetti.</p>
+  <p class="vuoto">Clicca un nodo per vedere cosa collega. Trascina per spostarti, rotella o pizzico per lo zoom, cerca in alto. «Menzioni» aggiunge i concetti trovati nel testo.</p>
+  <div class="legenda"><span class="pallino" style="background:var(--repo)"></span>Repo<span class="pallino" style="background:var(--nota)"></span>Note del second brain
+  <span class="pallino" style="background:var(--concetto)"></span>Concetti e tag<span class="pallino" style="background:var(--segnaposto)"></span>Note citate ma da creare
+  ${Object.entries(coloreRepo).map(([r, c]) => `<span class="pallino" style="background:${c}"></span>File di ${esc(r)}`).join("")}</div>`;
+}
+pannelloVuoto(); dimensiona(); aggiornaVisibili();
+for (let i = 0; i < 160; i++) passo(); adatta(); requestAnimationFrame(ciclo);
+</script>
+</body>
+</html>

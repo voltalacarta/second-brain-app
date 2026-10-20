@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https:; connect-src https://api.github.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181c" media="(prefers-color-scheme: dark)">
+<title>Second brain</title>
+<link rel="icon" href="icona.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="app.css?v=__VERSIONE__">
+<script type="module" src="js/main.js?v=__VERSIONE__"></script>
+</head>
+<body>
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+
+<!-- Accesso -->
+<section id="accesso" class="accesso" hidden>
+  <div class="accesso-box">
+    <h1><span class="marchio" aria-hidden="true"></span>Second brain</h1>
+    <p class="lead">Leggi, scrivi e collega le note del second brain, direttamente sulla repo GitHub. Ogni salvataggio è un commit; il grafo si aggiorna da solo.</p>
+    <form id="form-accesso" autocomplete="off">
+      <label>Repo <input id="in-repo" name="repo" value="voltalacarta/second-brain" spellcheck="false" required pattern="[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+"></label>
+      <label>Token GitHub <input id="in-token" name="token" type="password" spellcheck="false" required placeholder="github_pat_…"></label>
+      <label class="spunta"><input id="in-ricorda" type="checkbox"> Ricorda su questo dispositivo</label>
+      <button class="btn primario" type="submit">Entra</button>
+      <p class="errore" id="err-accesso" role="alert" hidden></p>
+    </form>
+    <details class="aiuto">
+      <summary>Come ottengo il token (2 minuti)</summary>
+      <ol>
+        <li>Apri <a id="link-token" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub → Fine-grained token</a>.</li>
+        <li><b>Resource owner</b>: <code>voltalacarta</code>. <b>Expiration</b>: 90 giorni.</li>
+        <li><b>Repository access</b> → <i>Only select repositories</i> → <code>second-brain</code>.</li>
+        <li><b>Permissions</b> → <i>Contents</i>: <b>Read and write</b>. Facoltativo: <i>Actions</i>: Read (per vedere quando il grafo è aggiornato).</li>
+        <li><b>Generate token</b>, copialo e incollalo qui sopra.</li>
+      </ol>
+      <p>Il token resta solo in questo browser e viene inviato soltanto a <code>api.github.com</code>. Senza «Ricorda» sparisce quando chiudi la scheda.</p>
+    </details>
+  </div>
+</section>
+
+<!-- App -->
+<div id="app" class="app" hidden>
+  <header class="barra">
+    <button class="icona solo-mobile" id="btn-menu" aria-label="Apri l'elenco delle note" aria-expanded="false">☰</button>
+    <a class="logo" href="#/"><span class="marchio" aria-hidden="true"></span><span class="logo-testo">Second brain</span></a>
+    <div class="cerca-box">
+      <input id="cerca" type="search" placeholder="Cerca note, concetti, idee…  ( / )" aria-label="Cerca" autocomplete="off" spellcheck="false">
+      <div id="cerca-esiti" class="cerca-esiti" role="listbox" hidden></div>
+    </div>
+    <nav class="azioni">
+      <a class="btn" href="#/g" title="Grafo (g)">Grafo</a>
+      <button class="btn" id="btn-oggi" title="Nota del giorno (o)">Oggi</button>
+      <button class="btn primario" id="btn-nuova" title="Nuova nota (n)">Nuova</button>
+      <button class="icona" id="btn-altro" aria-label="Altro" aria-haspopup="menu" aria-expanded="false">⋯</button>
+      <div class="menu" id="menu-altro" role="menu" hidden>
+        <button role="menuitem" id="m-aggiorna">Ricarica dalla repo</button>
+        <button role="menuitem" id="m-servizio">Mostra i file di servizio</button>
+        <a role="menuitem" id="m-github" target="_blank" rel="noopener noreferrer">Apri la repo su GitHub</a>
+        <button role="menuitem" id="m-esci">Esci e dimentica il token</button>
+      </div>
+    </nav>
+  </header>
+  <div class="corpo">
+    <aside class="lato" id="lato" aria-label="Note">
+      <div class="lato-testa">
+        <input id="filtro" type="search" placeholder="Filtra i file" aria-label="Filtra i file" autocomplete="off">
+      </div>
+      <nav id="albero" class="albero"></nav>
+      <div class="stato-repo" id="stato-repo"></div>
+    </aside>
+    <main id="contenuto" class="contenuto" tabindex="-1"></main>
+  </div>
+  <div id="avviso" class="avviso-toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<dialog id="dialogo" class="dialogo"></dialog>
+<noscript><p style="padding:24px">Questa app ha bisogno di JavaScript.</p></noscript>
+</body>
+</html>

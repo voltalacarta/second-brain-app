@@ -1,0 +1,12 @@
+{
+  "name": "Second brain · voltalacarta",
+  "short_name": "Second brain",
+  "description": "Leggi, scrivi e collega le note del second brain.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5ef",
+  "theme_color": "#2b3fa0",
+  "lang": "it",
+  "icons": [{ "src": "icona.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

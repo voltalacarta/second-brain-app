@@ -1,0 +1,19 @@
+{"k":"file","r":"documentazione","p":"10-decisioni/0001-usare-stripe.md","t":"Usare Stripe per le carte","st":"accettato","c":["pagamenti","stripe"],"s":"Si usa Stripe come gateway.","u":"https://github.com/voltalacarta/documentazione/blob/main/10-decisioni/0001-usare-stripe.md"}
+{"k":"file","r":"documentazione","p":"README.md","t":"Documentazione di prova","st":"attivo","c":["indice"],"s":"Decisioni: 0001.","u":"https://github.com/voltalacarta/documentazione/blob/main/README.md"}
+{"k":"file","r":"second-brain","p":"00-inbox/benvenuto.md","t":"Benvenuto","st":null,"c":["inbox","mepa","stripe"],"s":"Prima nota. Parla di Stripe e di MePA.","u":"https://github.com/voltalacarta/second-brain/blob/main/00-inbox/benvenuto.md"}
+{"k":"file","r":"second-brain","p":"00-inbox/prova-xss.md","t":"Prova sicurezza","st":null,"c":["img-src-x-onerror-alert-4"],"s":"","u":"https://github.com/voltalacarta/second-brain/blob/main/00-inbox/prova-xss.md"}
+{"k":"file","r":"second-brain","p":"10-progetti/demo/README.md","t":"Progetto demo","st":"attivo","c":["demo","progetto","cookie"],"s":"[!NOTE] Un progetto finto per i test dell'app.","u":"https://github.com/voltalacarta/second-brain/blob/main/10-progetti/demo/README.md"}
+{"k":"file","r":"second-brain","p":"20-aree/strumenti.md","t":"Strumenti","st":null,"c":["strumenti","stripe"],"s":"Usiamo Stripe per le carte. Vedi anche il progetto demo e benvenuto.","u":"https://github.com/voltalacarta/second-brain/blob/main/20-aree/strumenti.md"}
+{"k":"file","r":"second-brain","p":"40-archivio/README.md","t":"Archivio","st":null,"c":[],"s":"Qui finisce ciò che non serve più.","u":"https://github.com/voltalacarta/second-brain/blob/main/40-archivio/README.md"}
+{"k":"file","r":"second-brain","p":"inizia-qui.md","t":"Inizia qui","st":null,"c":["indice","idea-futura"],"s":"Benvenuto nel second brain di prova. Vai al progetto demo oppure leggi benvenuto.","u":"https://github.com/voltalacarta/second-brain/blob/main/inizia-qui.md"}
+{"k":"concetto","id":"stripe","t":"Stripe","cat":"strumento","n":3,"s":"","p":"_grafo/concetti/stripe.md"}
+{"k":"concetto","id":"indice","t":"Indice","cat":"tag","n":2,"s":"","p":"_grafo/concetti/indice.md"}
+{"k":"concetto","id":"img-src-x-onerror-alert-4","t":"<img src=x onerror=alert(4)>","cat":"segnaposto","n":1,"s":"","p":"_grafo/concetti/img-src-x-onerror-alert-4.md"}
+{"k":"concetto","id":"cookie","t":"Cookie","cat":"normativa","n":1,"s":"","p":"_grafo/concetti/cookie.md"}
+{"k":"concetto","id":"demo","t":"Demo","cat":"tag","n":1,"s":"","p":"_grafo/concetti/demo.md"}
+{"k":"concetto","id":"idea-futura","t":"idea-futura","cat":"segnaposto","n":1,"s":"","p":"_grafo/concetti/idea-futura.md"}
+{"k":"concetto","id":"inbox","t":"Inbox","cat":"tag","n":1,"s":"","p":"_grafo/concetti/inbox.md"}
+{"k":"concetto","id":"mepa","t":"MePA","cat":"organizzazione","n":1,"s":"","p":"_grafo/concetti/mepa.md"}
+{"k":"concetto","id":"pagamenti","t":"Pagamenti","cat":"tag","n":1,"s":"","p":"_grafo/concetti/pagamenti.md"}
+{"k":"concetto","id":"progetto","t":"Progetto","cat":"tag","n":1,"s":"","p":"_grafo/concetti/progetto.md"}
+{"k":"concetto","id":"strumenti","t":"Strumenti","cat":"tag","n":1,"s":"","p":"20-aree/strumenti.md"}
