@@ -1,0 +1,5 @@
+# Come il grafo del second brain legge questa repo (motore in second-brain/.github/kg).
+# Le note in test/fixture sono inventate per le prove: nel grafo sarebbero rumore.
+escludi:
+  - "test/**"
+  - "CLAUDE.md"
