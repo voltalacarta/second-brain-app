@@ -32,6 +32,10 @@ flowchart LR
 
 Ogni salvataggio è un commit (`note: …`) sulla repo. Dopo circa un minuto l'Action **Aggiorna il grafo** rigenera grafo e indice, e l'app li ricarica da sola.
 
+## Usarla con un altro account
+
+Copia questa repo nel tuo account con lo stesso nome (`second-brain-app`), poi attiva **Settings → Pages → Source: GitHub Actions**. Su `https://<utente>.github.io/second-brain-app/` l'app propone da sola la repo `<utente>/second-brain`. La struttura completa (second brain, grafo e documentazione) è in [second-brain-modello](https://github.com/voltalacarta/second-brain-modello).
+
 ## Primo accesso: il token
 
 1. Su GitHub apri **Settings → Developer settings → Fine-grained tokens → Generate new token**. Il link nella schermata di accesso dell'app compila già quasi tutto.

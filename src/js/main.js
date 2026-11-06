@@ -48,6 +48,9 @@ async function avvio() {
   if (window.top !== window.self) { document.body.textContent = "Per sicurezza questa app non si apre dentro un'altra pagina."; return; }
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
   $("#form-accesso").addEventListener("submit", accedi);
+  // Su <utente>.github.io propone <utente>/second-brain: la stessa app funziona per qualunque account.
+  const pages = /^([a-z0-9-]+)\.github\.io$/i.exec(location.hostname);
+  if (pages) $("#in-repo").value = `${pages[1].toLowerCase()}/second-brain`;
   const repo = mem.get("sb:repo"); if (repo) $("#in-repo").value = repo;
   $("#in-ricorda").checked = ricorda();
   aggiornaLinkToken();
