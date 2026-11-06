@@ -34,7 +34,7 @@ Ogni salvataggio è un commit (`note: …`) sulla repo. Dopo circa un minuto l'A
 
 ## Usarla con un altro account
 
-Copia questa repo nel tuo account con lo stesso nome (`second-brain-app`), poi attiva **Settings → Pages → Source: GitHub Actions**. Su `https://<utente>.github.io/second-brain-app/` l'app propone da sola la repo `<utente>/second-brain`. La struttura completa (second brain, grafo e documentazione) è in [second-brain-modello](https://github.com/voltalacarta/second-brain-modello).
+Copia questa repo nel tuo account con lo stesso nome (`second-brain-app`), poi attiva **Settings → Pages → Source: GitHub Actions**. Su `https://<utente>.github.io/second-brain-app/` l'app propone da sola la repo `<utente>/second-brain`. La struttura completa (second brain, grafo e documentazione) è in [modello-2nd-b](https://github.com/voltalacarta/modello-2nd-b).
 
 ## Primo accesso: il token
 
